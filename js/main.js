@@ -5,7 +5,7 @@ const height = width * 0.5;
 
 const margin = {
     left: 60,
-    right: 70,
+    right: 170,
     top: 10,
     bottom: 70
 };
@@ -185,5 +185,15 @@ Promise.all([
         .style("opacity", 1.0)
         .attr("stroke", (_, i) => i === 0 ? 'darkgreen' : 'pink')
         .attr("d", d => line(d));
+
+  svg.selectAll(".label")
+    .data(lines.map(d => d[d.length - 1]))
+    .join("text")
+      .attr("class", "label")
+      .attr("x", d => xScale(d[x]) + 10)
+      .attr("y", d => yScale(d[yLine]) + 5)
+      .attr("fill", (_, i) => i === 0 ? 'darkgreen' : 'pink')
+      .attr("stroke", (_, i) => i === 0 ? 'darkgreen' : 'pink')
+      .text((d,i) => i === 0 ? `A favor ${d[yLine].toFixed(1)}%` : `En contra ${d[yLine].toFixed(1)}%`);
 
 })
