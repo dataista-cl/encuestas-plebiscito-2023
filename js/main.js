@@ -76,7 +76,6 @@ Promise.all([
       "normalizado": d['en contra'] / (d['a favor'] + d['en contra'])
     }
   });
-  console.log(aprueba)
 
   const x = 'fecha';
   const yDots = 'valor';
@@ -86,6 +85,7 @@ Promise.all([
   const movingWindow = 3;
 
   const lines = [aprueba, desaprueba];
+  const colors = ["#2aad53", "#d934a1"]
 
   const xMin = d3.min(lines.map(d => d3.min(d, v => v[x])));
   const xMax = d3.max(lines.map(d => d3.max(d, v => v[x])));
@@ -125,11 +125,28 @@ Promise.all([
   xAxis.call(
     d3.axisBottom(xScale)
         .tickFormat(d3.timeFormat("%d %B"))
-        .ticks(d3.timeMonth.every(2))
+        .ticks(d3.timeMonth.every(1))
   );
-  yAxis.call(d3.axisLeft(yScale).tickFormat(d => d + '%'));
-  // xLabel.text(x);
-  // yLabel.text(yDots);
+  yAxis.call(
+    d3.axisLeft(yScale)
+      .tickFormat(d => d + '%')
+      .tickValues([0, 10, 20, 30, 40, 50, 60, 70])
+  );
+
+  xAxis.selectAll(".domain").remove();
+  yAxis.selectAll(".domain").remove()
+  yAxis.selectAll(".tick line")
+    .attr('x2', width - margin.right - margin.left)
+    .attr("stroke", "#d9d9d9");
+  xAxis.selectAll(".tick line")
+    .attr('y2', margin.top + margin.bottom - height)
+    .attr("stroke", "#d9d9d9");
+  xAxis.selectAll(".tick text")
+    .attr("fill", "#969696")
+    .attr("stroke", "none");
+  yAxis.selectAll(".tick text")
+    .attr("fill", "#969696")
+    .attr("stroke", "none");
 
   svg.selectAll("circle .aprueba")
       .data(aprueba.filter(d => d.encuesta === 'Cadem'))
@@ -139,7 +156,7 @@ Promise.all([
         .attr("cy", d => yScale(d[yDots]))
         .attr("r", circleRadius)
         .style("opacity", circleOpacity)
-        .style('fill', 'darkgreen');
+        .style('fill', colors[0]);
 
   svg.selectAll("circle .desaprueba")
     .data(desaprueba.filter(d => d.encuesta === 'Cadem'))
@@ -149,7 +166,7 @@ Promise.all([
       .attr("cy", d => yScale(d[yDots]))
       .attr("r", circleRadius)
       .style("opacity", circleOpacity)
-      .style('fill', 'pink');
+      .style('fill', colors[1]);
 
   svg.selectAll("rect .aprueba")
       .data(aprueba.filter(d => d.encuesta === 'Activa'))
@@ -160,7 +177,7 @@ Promise.all([
         .attr("width", 2 * circleRadius)
         .attr("height", 2 * circleRadius)
         .style("opacity", circleOpacity)
-        .style('fill', 'darkgreen');
+        .style('fill', colors[0]);
 
   svg.selectAll("rect .desaprueba")
     .data(desaprueba.filter(d => d.encuesta === 'Activa'))
@@ -171,7 +188,7 @@ Promise.all([
       .attr("width", 2 * circleRadius)
       .attr("height", 2 * circleRadius)
       .style("opacity", circleOpacity)
-      .style('fill', 'pink');
+      .style('fill', colors[1]);
 
   const curves = svg.selectAll(".curve")
       .data(lines)
@@ -183,7 +200,7 @@ Promise.all([
         .attr("stroke-linecap", "round")
         .style("mix-blend-mode", "multiply")
         .style("opacity", 1.0)
-        .attr("stroke", (_, i) => i === 0 ? 'darkgreen' : 'pink')
+        .attr("stroke", (_, i) => colors[i])
         .attr("d", d => line(d));
 
   svg.selectAll(".label")
@@ -192,8 +209,8 @@ Promise.all([
       .attr("class", "label")
       .attr("x", d => xScale(d[x]) + 10)
       .attr("y", d => yScale(d[yLine]) + 5)
-      .attr("fill", (_, i) => i === 0 ? 'darkgreen' : 'pink')
-      .attr("stroke", (_, i) => i === 0 ? 'darkgreen' : 'pink')
+      .attr("fill", (_, i) => colors[i])
+      .attr("stroke", (_, i) => colors[i])
       .text((d,i) => i === 0 ? `A favor ${d[yLine].toFixed(1)}%` : `En contra ${d[yLine].toFixed(1)}%`);
 
 })

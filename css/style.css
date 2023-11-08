@@ -172,6 +172,11 @@ svg text {
   font-family: 'Roboto Mono', monospace;
 }
 
+.label {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 500;
+}
+
 @media only screen and (max-width: 768px) {
   body {
     font-size: 14px;
