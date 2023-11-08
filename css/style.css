@@ -1,0 +1,196 @@
+body {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 16px;
+  /* background-color: #fff7ec; */
+  padding: 30px 20px;
+}
+
+.title {
+  font-family: 'David Libre', serif;
+  text-align: center;
+  padding-top: 40px;
+  padding-bottom: 30px;
+}
+
+.viz-wrapper {
+  display: block;
+  margin: 40px auto;
+  max-width: fit-content;
+}
+
+.viz-title {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.viz-escanos {
+  margin-top: -10px;
+}
+
+#escanos-final {
+  margin-top: 0;
+  margin-bottom: 30px;
+}
+
+.viz {
+  margin: 30px 0;
+}
+
+.viz-title-middle {
+  margin-top: 20px;
+}
+
+.title h2 {
+  font-size: 42px;
+}
+
+.form-inline, .form-group, select, input {
+  width: 100% !important;
+  height: 2em;
+}
+
+.form-control {
+  background-repeat: no-repeat;
+  display: inline;
+  height: 2em;
+  padding: 0 10px;
+  transition: all .4s ease-in-out;
+  vertical-align: middle;
+}
+
+input {
+  border: 1px solid #ced4da;
+  height: 2em;
+  margin: 0;
+  padding: 0 22px 0 10px;
+}
+
+::-webkit-input-placeholder {
+   font-style: italic;
+}
+:-moz-placeholder {
+   font-style: italic;
+}
+::-moz-placeholder {
+   font-style: italic;
+}
+:-ms-input-placeholder {
+   font-style: italic;
+}
+
+.delete {
+  position: absolute;
+  left: calc(100% - 50px);
+  width: 40px;
+  font-size: 24px;
+  top: calc(1em - 20px);
+  cursor: pointer;
+}
+
+#viz {
+  display: block;
+  text-align: center;
+}
+
+.viz-instructions {
+  font-style: italic;
+  margin-bottom: 20px;
+  margin-top: 40px;
+}
+
+.inner-circle, .inner-circle-label {
+  cursor: pointer;
+}
+
+.hidden {
+  cursor: default;
+}
+
+.row p {
+  margin: 20px 0;
+}
+
+.tooltip {
+  background: rgba(255,255,255,.9);
+  border: 1px solid black;
+  /* box-sizing: border-box; */
+  font-family: sans-serif;
+  font-size: 11px;
+  opacity: 0;
+  padding: 4px;
+  pointer-events: none;
+  position: absolute;
+  text-align: left;
+  z-index: 1;
+}
+
+.tooltip p {
+  margin: 2px 0 0 0;
+  padding: 0;
+}
+
+.tooltip::after {
+  border-color: #000 transparent transparent transparent;
+  border-style: solid;
+  border-width: 5px;
+  content: "";
+  left: 50%;
+  margin-left: -5px;
+  position: absolute;
+  top: 100%;
+}
+
+.footer {
+  border-top: 1px solid #ccc !important;
+}
+
+.footer a {
+  color: #525252;
+  text-decoration: underline;
+}
+
+.footer a:hover{
+  color: black;
+}
+
+.notes {
+  padding-top: 20px;
+  font-size: 12px;
+  font-family: 'Lato', sans-serif;
+  color: #525252;
+}
+
+h6 {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 0;
+  margin: 0;
+}
+
+svg text {
+  font-family: 'Roboto Mono', monospace;
+}
+
+@media only screen and (max-width: 768px) {
+  body {
+    font-size: 14px;
+  }
+
+  .viz-title {
+    font-size: 16px;
+  }
+
+  .title h2 {
+    font-size: 24px;
+  }
+
+  .main-text, .notes {
+    padding: 0 30px;
+  }
+
+  .selector {
+    padding: 10px 30px;
+  }
+
+}

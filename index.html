@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Como hubiese quedado el consejo constitucional con otros pactos</title>
+  <meta charset="utf-8">
+  <meta name="keywords" content="d3.js, visualization, interactive, politics, constitution, Chile">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta name="author" content="Fernando Becerra">
+	<meta name="description" content="Visualización interactiva que explora las distintas formas en que se hubiesen repartido los escaños del consejo constitucional dependiendo de los pactos suscritos por los partidos políticos participantes del proceso de escritura de una nueva constitución para Chile.">
+
+	<meta property="og:url" content="https://www.dataista.cl/pacto-unico-izquierda-consejo-constitucional">
+	<meta property="og:title" content="Como hubiese quedado el consejo constitucional con otros pactos">
+	<meta property="og:description" content="Visualización interactiva que explora las distintas formas en que se hubiesen repartido los escaños del consejo constitucional dependiendo de los pactos suscritos por los partidos políticos participantes del proceso de escritura de una nueva constitución para Chile.">
+	<meta property="og:image" content="http://www.dataista.cl/pacto-unico-izquierda-consejo-constitucional/img/social-og.png">
+	<meta property="og:site_name" content="Fernando Becerra">
+
+	<meta property="twitter:creator" content="@fdo_becerra">
+	<meta property="twitter:title" content="Como hubiese quedado el consejo constitucional con otros pactos">
+	<meta property="twitter:description" content="Visualización interactiva que explora las distintas formas en que se hubiesen repartido los escaños del consejo constitucional dependiendo de los pactos suscritos por los partidos políticos participantes del proceso de escritura de una nueva constitución para Chile.">
+	<meta property="twitter:card" content="summary_large_image">
+	<meta property="twitter:image" content="http://www.dataista.cl/pacto-unico-izquierda-consejo-constitucional/img/social-twitter.png">
+	<meta property="twitter:site" content="@fdo_becerra">
+
+  <link href="https://fonts.googleapis.com/css2?family=David+Libre:wght@500&family=Open+Sans:wght@300;400;500;600;700&family=Roboto+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="row">
+    <div class="col-sm-1 col-md-2 col-lg-3 ">
+    </div>
+    <div class="col-xs-12 col-sm-10 col-md-8 col-lg-6  title">
+        <h2>¿Cuál es la aprobación al gobierno de Gabriel Boric?</h2>
+        <h4>Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque odit dicta rem assumenda labore nesciunt esse odio quasi, eveniet nihil sed dolores sunt ab voluptas asperiores repellendus debitis, fuga porro.</h4>
+    </div>
+    <div class="col-sm-1 col-md-2 col-lg-3 ">
+    </div>
+  </div>
+  <div class="row content">
+    <div class="col-sm-1 col-md-1 col-lg-1 ">
+    </div>
+    <div class="col-sm-10 col-md-10 col-lg-10 ">
+      <div class="row justify-content-center viz-wrapper">
+        <div class="viz-title">Resultados de la votación</div>
+        <div class="viz-escanos" id="viz-aprobacion-gabriel-boric"></div>
+      </div>
+    </div>
+    <div class="col-sm-1 col-md-1 col-lg-1 ">
+    </div>
+  </div>
+  <div class="row content">
+    <div class="col-sm-1 col-md-2 col-lg-3 ">
+    </div>
+    <div class="col-xs-12 col-sm-10 col-md-8 col-lg-6  main-text">
+      <div class="row justify-content-center viz-wrapper">
+        <div class="viz-title">Resultados de la votación</div>
+        <div class="viz-escanos" id="viz-aprobacion-gabriel-boric"></div>
+      </div>
+      <div class="row">
+        <p>
+          El dominio de la derecha fue claro en los resultados de la votación del pasado domingo 7 de mayo para elegir representantes para el Consejo Constitucional.
+          El Partido Republicano se convirtió en el partido más votado con un total de 3,47 millones de votos, logrando 23 de los 50 escaños disponibles. 
+          Junto a los 11 escaños logrados por el pacto <i>Chile Seguro</i>, la derecha aseguró más de dos tercios del total de cupos, dejando a la izquierda sin poder de veto. 
+        </p>
+        <p>
+          Si los partidos de <i>Todo por Chile</i>, quienes no lograron asegurar ningún cupo en el Consejo Constitucional, hubiesen ido en la lista de <i>Unidad para Chile</i>, le hubieran quitado dos asientos a <i>Chile Seguro</i> y dos al <i>Partido Republicano</i>, totalizando 20 escaños.
+          Con este resultado, un pacto único entre la izquierda y la centro-izquierda hubiese alcanzado al menos un tercio de los cupos disponibles, dándoles más poder de negociación con la derecha.
+        </p>
+      </div>
+      <div class="row justify-content-center viz-wrapper">
+        <div class="viz-title">Si el Partido Republicano se hubiese unido a Chile Seguro</div>
+        <div class="viz-escanos" id="escanos-seguro"></div>
+      </div>
+      <div class="row">
+        <p>
+          Si la izquierda hubiese ido unida en una sola coalición, intuitivamente uno pensaría que la derecha podría haber hecho lo mismo.
+          Pero incluso en ese caso la izquierda hubiese logrado dos escaños más, logrando pasar el umbral del tercio de cupos que le permitían contrarrestar un poco la mayoría lograda por la derecha.
+          En ambos casos, con los republicanos dentro o fuera de <i>Chile Seguro</i>, la ventaja de la izquierda al ir en un pacto único hubiese sido alcanzar el poder de veto.
+        </p>
+        <p>
+          Estas son sólo algunas de las alternativas de pactos que se pudieran haber formado de cara a las elecciones.
+          En realidad, las variantes van mucho más: por ejemplo, uno podría pensar que el Partido de la Gente se podría haber sumado a los partidos de derecha.
+          O uno se podría imaginar el caso en que las elecciones se hubiesen realizado sin pactos y que cada partido hubiese ido independientemente.
+          A continuación se deja una herramienta para explorar cómo hubiese cambiado la composición del Consejo Constitucional dependiendo de los pactos formados, en base a la votación que cada partido recibió en cada región del país.
+        </p>
+      </div>
+    </div>
+    <div class="col-sm-1 col-md-2 col-lg-3 ">
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-1 col-md-2 col-lg-3 ">
+    </div>
+    <div class="col-xs-12 col-sm-10 col-md-8 col-lg-6  ">
+      <div class="viz-instructions">Arrastre el círculo de un partido para cambiarlo de pacto</div>
+      <div id="viz-3"></div>
+    </div>
+    <div class="col-sm-1 col-md-2 col-lg-3 ">
+    </div>
+  </div>
+  <div class="row" id="viz">
+  </div>
+  <div class="row footer">
+    <div class="col-sm-1 col-md-2 col-lg-3 ">
+    </div>
+    <div class="col-xs-12 col-sm-10 col-md-8 col-lg-6  notes">
+      <p>
+        <h6>Fuentes</h6>
+        Los resultados de las votaciones fueron sacados del <a href="https://www.servelelecciones.cl" target="_blank">portal del Servicio Electoral.</a>
+        Los colores de cada partido fueron elegidos en base a sus logos, mientras que los colores de cada pacto se basaron en la paleta usada por <a href="https://live.decidechile.cl/2023/consejeros" target="_blank">Decide Chile</a>.
+      </p>
+      <p>
+        <h6>Métodos</h6>
+        Los pactos electorales fueron definidos en base a su inscripción en el servicio electoral.
+        Los votos obtenidos por partido político en cada región se bajaron desde la <a href="https://www.servelelecciones.cl" target="_blank">página del Servel</a>.
+        Cada vez que un partido político es movido a un nuevo pacto, se calculan los votos totales de cada pacto en cada región como la suma de los votos recibidos por cada partido perteneciente al pacto.
+        Finalmente, se calculan las primeras mayorías por región usando el <a href="https://www.servel.cl/2015/08/18/nuevo-sistema-electoral-chileno-metodo-dhont-2/" target="_blank">sistema D'Hondt</a>, lo que da el número final de escaños ocupados por cada pacto.
+      </p>
+      <p>
+        <h6>Autor</h6>
+        Fernando Becerra es un científico de datos que se dedica al análisis y visualización de datos.
+        Lo puedes contactar en su <a href="http://fernandobecerra.com" target="_blank">página web</a>,
+        su <a href="https://twitter.com/fdo_becerra" target="_blank">cuenta de Twitter</a>
+        o directamente a su <a href="mailto:becerrafernando@gmail.com">dirección de correo</a>.
+      </p>
+
+    </div>
+    <div class="col-sm-1 col-md-2 col-lg-3 ">
+    </div>
+  </div>
+  <script src="js/d3.v7.min.js"></script>
+  <script src="js/main.js"></script>
+<body>
+</body>
+</html>
