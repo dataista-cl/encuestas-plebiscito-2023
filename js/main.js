@@ -38,6 +38,22 @@ const yLabel = yAxis.append("g")
     .attr("fill", "black")
     .attr("transform", `translate(10, ${margin.top}) rotate(-90)`);
 
+const rule = svg.append("g")
+    .attr("class", "rule")
+    .attr("transform", "translate(" + margin.left + ",0)");
+
+rule.append("line")
+    .attr("y1", margin.top)
+    .attr("y2", height - margin.bottom)
+    .attr("stroke", "#252525");
+
+rule.append("text")
+    .attr("text-anchor", "start")
+    .style("font-size", "10px")
+    .style("font-family", "sans-serif")
+    .attr("fill", "black")
+    .attr('y', margin.top + 10);
+
 Promise.all([
   d3.csv("data/encuestas_plebiscito_2023.csv"),
   d3.json("js/es-ES.json")
@@ -108,6 +124,7 @@ Promise.all([
   movingAverage(aprueba, movingWindow, yDots, 'peso');
   movingAverage(desaprueba, movingWindow, yDots, 'peso');
 
+  const dates = aprueba.map(v => v.fecha);
 
   const xScale = d3.scaleTime()
     .range([margin.left, width - margin.right])
@@ -149,7 +166,7 @@ Promise.all([
     .attr("stroke", "none");
 
   svg.selectAll("circle .aprueba")
-      .data(aprueba.filter(d => d.encuesta === 'Cadem'))
+      .data(aprueba)
       .join("circle")
         .attr("class", "aprueba")
         .attr("cx", d => xScale(d[x]))
@@ -159,34 +176,12 @@ Promise.all([
         .style('fill', colors[0]);
 
   svg.selectAll("circle .desaprueba")
-    .data(desaprueba.filter(d => d.encuesta === 'Cadem'))
+    .data(desaprueba)
     .join("circle")
       .attr("class", "desaprueba")
       .attr("cx", d => xScale(d[x]))
       .attr("cy", d => yScale(d[yDots]))
       .attr("r", circleRadius)
-      .style("opacity", circleOpacity)
-      .style('fill', colors[1]);
-
-  svg.selectAll("rect .aprueba")
-      .data(aprueba.filter(d => d.encuesta === 'Activa'))
-      .join("rect")
-        .attr("class", "aprueba")
-        .attr("x", d => xScale(d[x]) - circleRadius)
-        .attr("y", d => yScale(d[yDots]) - circleRadius)
-        .attr("width", 2 * circleRadius)
-        .attr("height", 2 * circleRadius)
-        .style("opacity", circleOpacity)
-        .style('fill', colors[0]);
-
-  svg.selectAll("rect .desaprueba")
-    .data(desaprueba.filter(d => d.encuesta === 'Activa'))
-    .join("rect")
-      .attr("class", "desaprueba")
-      .attr("x", d => xScale(d[x]) - circleRadius)
-      .attr("y", d => yScale(d[yDots]) - circleRadius)
-      .attr("width", 2 * circleRadius)
-      .attr("height", 2 * circleRadius)
       .style("opacity", circleOpacity)
       .style('fill', colors[1]);
 
@@ -210,7 +205,71 @@ Promise.all([
       .attr("x", d => xScale(d[x]) + 10)
       .attr("y", d => yScale(d[yLine]) + 5)
       .attr("fill", (_, i) => colors[i])
-      .attr("stroke", (_, i) => colors[i])
+      .attr("stroke", 'white')
+      .attr('stroke-width', 4)
+      .style('paint-order', 'stroke fill')
       .text((d,i) => i === 0 ? `A favor ${d[yLine].toFixed(1)}%` : `En contra ${d[yLine].toFixed(1)}%`);
+
+  svg.on('mousemove', moved)
+      .on('mouseenter', entered)
+      .on('mouseleave', left)
+      .on('click', click);
+
+  function moved(event) {
+      const thisX = d3.pointer(event, this)[0];
+
+      if (thisX < width - margin.right) {
+        const xm = xScale.invert(thisX);
+        const i1 = d3.bisectLeft(dates, xm, 1);
+        const i0 = i1 - 1;
+        const i = xm - dates[i0] > dates[i1] - xm ? i1 : i0;
+
+        rule.style('opacity', 1.0);
+
+        rule.select('line')
+            .attr("x1", xScale(dates[i]) - margin.left)
+            .attr("x2", xScale(dates[i]) - margin.left);
+
+        rule.select("text")
+            .attr("x", xScale(dates[i]) - margin.left + 5)
+            .text(d3.timeFormat("%B %d, %Y")(dates[i]));
+
+        svg.selectAll(".label")
+            .data(lines.map(d => d[i]))
+            .join("text")
+              .attr("class", "label")
+              .attr("x", d => xScale(d[x]) + 10)
+              .attr("y", d => yScale(d[yLine]) + 5)
+              .attr("fill", (_, i) => colors[i])
+              .attr("stroke", 'white')
+              .attr('stroke-width', 4)
+              .text((d,i) => i === 0 ? `A favor ${d[yLine].toFixed(1)}%` : `En contra ${d[yLine].toFixed(1)}%`);
+      } else {
+        rule.style("opacity", 0.0);
+      }     
+  };
+
+  function entered(event) {
+      
+  };
+
+  function left(event) {
+      rule.style("opacity", 0.0);
+
+      svg.selectAll(".label")
+        .data(lines.map(d => d[d.length - 1]))
+        .join("text")
+          .attr("class", "label")
+          .attr("x", d => xScale(d[x]) + 10)
+          .attr("y", d => yScale(d[yLine]) + 5)
+          .attr("fill", (_, i) => colors[i])
+          .attr("stroke", 'white')
+          .attr('stroke-width', 4)
+          .text((d,i) => i === 0 ? `A favor ${d[yLine].toFixed(1)}%` : `En contra ${d[yLine].toFixed(1)}%`);
+  };
+
+  function click(event) {
+      
+  };
 
 })
