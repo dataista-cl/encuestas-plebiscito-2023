@@ -306,6 +306,7 @@ svg text {
 
   .title h2 {
     font-size: 24px;
+    font-weight: 700;
   }
 
   .main-text, .notes {
@@ -315,10 +316,11 @@ svg text {
   .selector {
     padding: 10px 30px;
   }
+}
 
+@media only screen and (max-width: 992px) {
   .menu {
     margin: 4px 0;
     text-align: center;
   }
-
 }

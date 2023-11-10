@@ -1,14 +1,14 @@
 const windowWidth = window.innerWidth;
 const threshold = 500;
 
-const width = windowWidth < threshold ? windowWidth * 0.95 : windowWidth * 0.7;
+const width = windowWidth < threshold ? windowWidth * 0.9 : windowWidth * 0.7;
 const height = windowWidth < threshold ? width * 0.8 : width * 0.5;
 
 const margin = {
     left: windowWidth < threshold ? 30 : 60,
     right: windowWidth < threshold ? 80 : 170,
     top: 10,
-    bottom: 70
+    bottom: windowWidth < threshold ? 20 : 70
 };
 
 const svg = d3.select("#viz-aprobacion-gabriel-boric").append("svg")
