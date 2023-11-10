@@ -59,6 +59,8 @@ Promise.all([
   d3.json("js/es-ES.json")
 ]).then(function(data){
 
+  let plotEncuestas = 'Todas';
+
   const gb = data[0];
 
   d3.timeFormatDefaultLocale(data[1]);
@@ -118,6 +120,52 @@ Promise.all([
         updatePlot();
       });
 
+  function getUniquesMenu(df, thisVariable) {
+
+    var thisList = df.map(function(o) {
+      return o[thisVariable]
+    })
+  
+    // uniq() found here https://stackoverflow.com/questions/9229645/remove-duplicate-values-from-js-array
+    function uniq(a) {
+        return a.sort().filter(function(item, pos, ary) {
+            return !pos || item != ary[pos - 1];
+        });
+    }
+  
+    var uniqueList = uniq(thisList);
+  
+    return uniqueList;
+  }
+
+  function addOptions(id, values) {
+    var element = d3.select("#"+id);
+    var options = element.selectAll("option").data(values);
+  
+    options.enter().append("a")
+      .html(d => d);
+  
+    options.exit().remove();
+  
+    return element;
+  }
+
+  const encuestas =['Todas', ...getUniquesMenu(aprueba, 'encuesta')];
+  let encOpts = addOptions("encuesta-content", encuestas);
+  d3.select("#encuesta-dropdown")
+    .on("click", function(d){
+      document.getElementById("encuesta-content").classList.toggle("show");
+    });
+  d3.select("#encuesta-dropdown").select(".dropbtn").html('Todas');
+  encOpts.selectAll("a").on("click", function(event, d){
+    if (d !== plotEncuestas) {
+      plotEncuestas = d;
+      console.log(d)
+      d3.select("#encuesta-dropdown").select(".dropbtn").html(plotEncuestas);
+      updatePlot();
+    }
+  })
+
   const x = 'fecha';
   let yDots = 'valor';
   const yLine = 'promedio';
@@ -125,11 +173,11 @@ Promise.all([
     circleOpacity = 0.7;
   let movingWindow = 3;
 
-  let lines = [aprueba, desaprueba];
+  let lines = plotEncuestas === 'Todas' ? [aprueba, desaprueba] : [aprueba.filter(d => d.encuesta === plotEncuestas), desaprueba.filter(d => d.encuesta === plotEncuestas)];
   const colors = ["#2aad53", "#d934a1"]
 
-  const xMin = d3.min(lines.map(d => d3.min(d, v => v[x])));
-  const xMax = d3.max(lines.map(d => d3.max(d, v => v[x])));
+  let xMin = d3.min(lines.map(d => d3.min(d, v => v[x])));
+  let xMax = d3.max(lines.map(d => d3.max(d, v => v[x])));
   let yMin = 0;
   let yMax = 70;
   let tickValues = [0, 10, 20, 30, 40, 50, 60, 70];
@@ -161,28 +209,36 @@ Promise.all([
     .x(d => xScale(d[x]))
     .y(d => yScale(d[yLine]));
 
-  xAxis.call(
-    d3.axisBottom(xScale)
-        .tickFormat(d3.timeFormat("%d %B"))
-        .ticks(d3.timeMonth.every(1))
-  );
-
-  xAxis.selectAll(".domain").remove();
-  xAxis.selectAll(".tick line")
-    .attr('y2', margin.top + margin.bottom - height)
-    .attr("stroke", "#d9d9d9");
-  xAxis.selectAll(".tick text")
-    .attr("fill", "#969696")
-    .attr("stroke", "none");
-
   const updatePlot = () => {
-    movingAverage(aprueba, movingWindow, yDots, 'peso');
-    movingAverage(desaprueba, movingWindow, yDots, 'peso');
 
-    lines = [aprueba, desaprueba];
+    filteredAprueba = plotEncuestas === 'Todas' ? aprueba : aprueba.filter(d => d.encuesta === plotEncuestas);
+    filteredDesaprueba = plotEncuestas === 'Todas' ? desaprueba : desaprueba.filter(d => d.encuesta === plotEncuestas);
 
+    movingAverage(filteredAprueba, movingWindow, yDots, 'peso');
+    movingAverage(filteredDesaprueba, movingWindow, yDots, 'peso');
+
+    lines = [filteredAprueba, filteredDesaprueba];
+
+    xMin = d3.min(lines.map(d => d3.min(d, v => v[x])));
+    xMax = d3.max(lines.map(d => d3.max(d, v => v[x])));
+
+    xScale.domain([xMin, xMax]);
     yScale.domain([yMin, yMax]);
-    line.y(d => yScale(d[yLine]));
+    line.x(d => xScale(d[x])).y(d => yScale(d[yLine]));
+
+    xAxis.call(
+      d3.axisBottom(xScale)
+          .tickFormat(d3.timeFormat("%d %B"))
+          .ticks(d3.timeMonth.every(1))
+    );
+  
+    xAxis.selectAll(".domain").remove();
+    xAxis.selectAll(".tick line")
+      .attr('y2', margin.top + margin.bottom - height)
+      .attr("stroke", "#d9d9d9");
+    xAxis.selectAll(".tick text")
+      .attr("fill", "#969696")
+      .attr("stroke", "none");
 
     yAxis.call(
       d3.axisLeft(yScale)
@@ -199,7 +255,7 @@ Promise.all([
       .attr("stroke", "none");
   
     svg.selectAll(".aprueba")
-        .data(aprueba)
+        .data(lines[0])
         .join("circle")
           .attr("class", "aprueba")
           .attr("cx", d => xScale(d[x]))
@@ -209,7 +265,7 @@ Promise.all([
           .style('fill', colors[0]);
   
     svg.selectAll(".desaprueba")
-      .data(desaprueba)
+      .data(lines[1])
       .join("circle")
         .attr("class", "desaprueba")
         .attr("cx", d => xScale(d[x]))
@@ -258,8 +314,8 @@ Promise.all([
           const i0 = i1 - 1;
           const i = xm - dates[i0] > dates[i1] - xm ? i1 : i0;
   
-          const af = aprueba[i].promedio;
-          const ec = desaprueba[i].promedio;
+          const af = lines[0][i].promedio;
+          const ec = lines[1][i].promedio;
   
           const textString = af > ec ? 'AF' : af < ec ? 'EC' : 'Empate';
           const textColor = af > ec ? colors[0] : af < ec ? colors[1] : 'black';
