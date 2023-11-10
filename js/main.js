@@ -47,12 +47,12 @@ rule.append("line")
     .attr("y2", height - margin.bottom)
     .attr("stroke", "#252525");
 
-rule.append("text")
+const ruleText = rule.append("text")
     .attr("text-anchor", "start")
     .style("font-size", "10px")
     .style("font-family", "sans-serif")
     .attr("fill", "black")
-    .attr('y', margin.top + 10);
+    .attr('y', margin.top + 16);
 
 Promise.all([
   d3.csv("data/encuestas_plebiscito_2023.csv"),
@@ -224,15 +224,29 @@ Promise.all([
         const i0 = i1 - 1;
         const i = xm - dates[i0] > dates[i1] - xm ? i1 : i0;
 
+        const af = aprueba[i].promedio;
+        const ec = desaprueba[i].promedio;
+
+        const textString = af > ec ? 'AF' : af < ec ? 'EC' : 'Empate';
+        const textColor = af > ec ? colors[0] : af < ec ? colors[1] : 'black';
+        const textDifference = af > ec ? (af - ec).toFixed(1) : af < ec ?(ec - af).toFixed(1) : 0;
+
         rule.style('opacity', 1.0);
 
         rule.select('line')
             .attr("x1", xScale(dates[i]) - margin.left)
             .attr("x2", xScale(dates[i]) - margin.left);
 
-        rule.select("text")
+        ruleText.attr("x", xScale(dates[i]) - margin.left + 5);
+          
+        ruleText.selectAll("tspan")
+          .data([d3.timeFormat("%d de %B")(dates[i]), `${textString} +${textDifference}%`])
+          .join("tspan")
             .attr("x", xScale(dates[i]) - margin.left + 5)
-            .text(d3.timeFormat("%B %d, %Y")(dates[i]));
+            .attr("dy", (_,i) => i === 0 ? 0 : 18)
+            .attr("class", (_,i) => i === 0 ? 'rule-date' : 'rule-difference')
+            .style('fill', (_,i) => i === 0 ? 'black' : textColor)
+            .text(d => d);
 
         svg.selectAll(".label")
             .data(lines.map(d => d[i]))
