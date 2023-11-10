@@ -54,6 +54,16 @@ const ruleText = rule.append("text")
     .attr("fill", "black")
     .attr('y', margin.top + 16);
 
+
+window.onclick = function(event) {
+  if (!event.target.matches('#encuesta-dropbtn')) {
+    var dropdown = document.getElementById("encuesta-content");
+    if (dropdown.classList.contains('show')) {
+      dropdown.classList.remove('show');
+    }
+  }
+}
+
 Promise.all([
   d3.csv("data/encuestas_plebiscito_2023.csv"),
   d3.json("js/es-ES.json")

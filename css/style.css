@@ -194,6 +194,63 @@ svg text {
   font-weight: 600;
 }
 
+.dropbtn {
+  color: #696969;
+  padding: 8px 12px;
+  line-height: 150%;
+  font-size: 16px;
+  border: 1px solid #D2D2D2;
+  cursor: pointer;
+  width: auto;
+  /* background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='28' viewBox='0 0 28 28' width='28' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>"); */
+  background-image: url("../img/icon-chevron-down.svg");
+  background-repeat: no-repeat;
+  background-position-x: calc(100% - 12px);
+  background-position-y: 50%;
+  background-size: 16px;
+}
+
+.dropbtn svg {
+  padding-right: 10px;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  margin: 5px 12px 5px 0px;
+  position: relative;
+  display: inline-block;
+  width: 260px;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  width: 258px;
+  max-height: 360px;
+  /* box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); */
+  z-index: 1000000;
+  overflow: scroll;
+  background: #FFFFFF;
+  border: 1px solid #D2D2D2;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  font-size: 16px;
+  color: #353535;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  cursor: pointer;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #ddd}
+
+/* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+.show {display:block;}
+
 @media only screen and (max-width: 768px) {
   body {
     font-size: 14px;
