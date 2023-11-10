@@ -1,11 +1,12 @@
 const windowWidth = window.innerWidth;
+const threshold = 500;
 
-const width = windowWidth * 0.7;
-const height = width * 0.5;
+const width = windowWidth < threshold ? windowWidth * 0.95 : windowWidth * 0.7;
+const height = windowWidth < threshold ? width * 0.8 : width * 0.5;
 
 const margin = {
-    left: 60,
-    right: 170,
+    left: windowWidth < threshold ? 30 : 60,
+    right: windowWidth < threshold ? 80 : 170,
     top: 10,
     bottom: 70
 };
@@ -105,30 +106,49 @@ Promise.all([
     }
   });
 
+  const x = 'fecha';
+  let yDots = 'valor';
+  const yLine = 'promedio';
+  const circleRadius = 3,
+    circleOpacity = 0.7;
+  let movingWindow = 3;
+  let porcentaje = 'absoluto';
+
   const promButtons = d3.select("#promedio-buttons");
-
-  promButtons.selectAll("span")
-    .data(['1 encuesta', '3 encuestas', '5 encuestas'])
-    .join('span')
-      .html(d => d)
-      .on("click", (evt,d) => {
-        movingWindow = Number(d[0]);
-        updatePlot();
-      });
-
   const porcButtons = d3.select("#porcentaje-buttons");
 
-  porcButtons.selectAll("span")
-    .data(['absoluto', 'relativo'])
-    .join('span')
-      .html(d => d)
-      .on("click", (evt,d) => {
-        yDots = d === 'absoluto' ? 'valor' : 'normalizado';
-        yMin = d === 'absoluto' ? 0 : 20;
-        yMax = d === 'absoluto' ? 70 : 80;
-        tickValues = d === 'absoluto' ? [0, 10, 20, 30, 40, 50, 60, 70] : [20, 30, 40, 50, 60, 70, 80];
-        updatePlot();
-      });
+  const updateButtons = () => {
+    promButtons.selectAll("span")
+      .data(['5', '3', '1'])
+      .join('span')
+        .html(d => d)
+        .on("click", (evt,d) => {
+          movingWindow = Number(d);
+          updatePlot();
+          updateButtons();
+        });
+
+    promButtons.selectAll("span").classed('active', d => movingWindow === Number(d))
+
+    porcButtons.selectAll("span")
+      .data(['relativo', 'absoluto'])
+      .join('span')
+        .html(d => d)
+        // .attr('class', yDots === 'active')
+        .on("click", (evt,d) => {
+          porcentaje = d;
+          yDots = d === 'absoluto' ? 'valor' : 'normalizado';
+          yMin = d === 'absoluto' ? 0 : 20;
+          yMax = d === 'absoluto' ? 70 : 80;
+          tickValues = d === 'absoluto' ? [0, 10, 20, 30, 40, 50, 60, 70] : [20, 30, 40, 50, 60, 70, 80];
+          updatePlot();
+          updateButtons();
+        });
+
+        porcButtons.selectAll("span").classed('active', d => d === porcentaje)
+  }
+
+  updateButtons();
 
   function getUniquesMenu(df, thisVariable) {
 
@@ -175,13 +195,6 @@ Promise.all([
       updatePlot();
     }
   })
-
-  const x = 'fecha';
-  let yDots = 'valor';
-  const yLine = 'promedio';
-  const circleRadius = 3,
-    circleOpacity = 0.7;
-  let movingWindow = 3;
 
   let lines = plotEncuestas === 'Todas' ? [aprueba, desaprueba] : [aprueba.filter(d => d.encuesta === plotEncuestas), desaprueba.filter(d => d.encuesta === plotEncuestas)];
   const colors = ["#2aad53", "#d934a1"]
@@ -239,7 +252,7 @@ Promise.all([
     xAxis.call(
       d3.axisBottom(xScale)
           .tickFormat(d3.timeFormat("%d %B"))
-          .ticks(d3.timeMonth.every(1))
+          .ticks(windowWidth < threshold ? d3.timeMonth.every(2) : d3.timeMonth.every(1))
     );
   
     xAxis.selectAll(".domain").remove();
@@ -308,7 +321,14 @@ Promise.all([
         .attr("stroke", 'white')
         .attr('stroke-width', 4)
         .style('paint-order', 'stroke fill')
-        .text((d,i) => i === 0 ? `A favor ${d[yLine].toFixed(1)}%` : `En contra ${d[yLine].toFixed(1)}%`);
+        .text((d,i) => {
+          if (windowWidth < threshold) {
+            return  i === 0 ? `${d[yLine].toFixed(1)}%` : `${d[yLine].toFixed(1)}%`
+          } else {
+            return i === 0 ? `A favor ${d[yLine].toFixed(1)}%` : `En contra ${d[yLine].toFixed(1)}%`
+          }
+          
+        });
   
     svg.on('mousemove', moved)
         .on('mouseenter', entered)
@@ -340,7 +360,7 @@ Promise.all([
           ruleText.attr("x", xScale(dates[i]) - margin.left + 5);
             
           ruleText.selectAll("tspan")
-            .data([d3.timeFormat("%d de %B")(dates[i]), `${textString} +${textDifference}%`])
+            .data([windowWidth < threshold ? d3.timeFormat("%d de %b")(dates[i]) : d3.timeFormat("%d de %B")(dates[i]), `${textString} +${textDifference}%`])
             .join("tspan")
               .attr("x", xScale(dates[i]) - margin.left + 5)
               .attr("dy", (_,i) => i === 0 ? 0 : 18)
@@ -357,7 +377,13 @@ Promise.all([
                 .attr("fill", (_, i) => colors[i])
                 .attr("stroke", 'white')
                 .attr('stroke-width', 4)
-                .text((d,i) => i === 0 ? `A favor ${d[yLine].toFixed(1)}%` : `En contra ${d[yLine].toFixed(1)}%`);
+                .text((d,i) => {
+                  if (windowWidth < threshold) {
+                    return i === 0 ? `${d[yLine].toFixed(1)}%` : `${d[yLine].toFixed(1)}%`;
+                  } else {
+                    return i === 0 ? `A favor ${d[yLine].toFixed(1)}%` : `En contra ${d[yLine].toFixed(1)}%`;
+                  }
+                });
         } else {
           rule.style("opacity", 0.0);
         }     
