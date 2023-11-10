@@ -79,7 +79,7 @@ Promise.all([
       "fecha": d.fecha,
       "valor": d['a favor'],
       "peso": Math.round(d.casos * d['a favor'] / 100),
-      "normalizado": d['a favor'] / (d['a favor'] + d['en contra'])
+      "normalizado": d['a favor'] / (d['a favor'] + d['en contra']) * 100
     }
   });
 
@@ -89,7 +89,7 @@ Promise.all([
       "fecha": d.fecha,
       "valor": d['en contra'],
       "peso": Math.round(d.casos * d['en contra'] / 100),
-      "normalizado": d['en contra'] / (d['a favor'] + d['en contra'])
+      "normalizado": d['en contra'] / (d['a favor'] + d['en contra']) * 100
     }
   });
 
@@ -101,11 +101,22 @@ Promise.all([
       .html(d => d)
       .on("click", (evt,d) => {
         movingWindow = Number(d[0]);
-
-        console.log(movingWindow)
-
         updatePlot();
-      })
+      });
+
+  const porcButtons = d3.select("#porcentaje-buttons");
+
+  porcButtons.selectAll("span")
+    .data(['absoluto', 'relativo'])
+    .join('span')
+      .html(d => d)
+      .on("click", (evt,d) => {
+        yDots = d === 'absoluto' ? 'valor' : 'normalizado';
+        yMin = d === 'absoluto' ? 0 : 20;
+        yMax = d === 'absoluto' ? 70 : 80;
+        tickValues = d === 'absoluto' ? [0, 10, 20, 30, 40, 50, 60, 70] : [20, 30, 40, 50, 60, 70, 80];
+        updatePlot();
+      });
 
   const x = 'fecha';
   let yDots = 'valor';
@@ -119,8 +130,9 @@ Promise.all([
 
   const xMin = d3.min(lines.map(d => d3.min(d, v => v[x])));
   const xMax = d3.max(lines.map(d => d3.max(d, v => v[x])));
-  const yMin = 0;
-  const yMax = 70;
+  let yMin = 0;
+  let yMax = 70;
+  let tickValues = [0, 10, 20, 30, 40, 50, 60, 70];
 
   const movingAverage = (array, window, valueField, weightField) => {
     for (let idx = 0; idx < array.length; idx++) {
@@ -154,24 +166,12 @@ Promise.all([
         .tickFormat(d3.timeFormat("%d %B"))
         .ticks(d3.timeMonth.every(1))
   );
-  yAxis.call(
-    d3.axisLeft(yScale)
-      .tickFormat(d => d + '%')
-      .tickValues([0, 10, 20, 30, 40, 50, 60, 70])
-  );
 
   xAxis.selectAll(".domain").remove();
-  yAxis.selectAll(".domain").remove()
-  yAxis.selectAll(".tick line")
-    .attr('x2', width - margin.right - margin.left)
-    .attr("stroke", "#d9d9d9");
   xAxis.selectAll(".tick line")
     .attr('y2', margin.top + margin.bottom - height)
     .attr("stroke", "#d9d9d9");
   xAxis.selectAll(".tick text")
-    .attr("fill", "#969696")
-    .attr("stroke", "none");
-  yAxis.selectAll(".tick text")
     .attr("fill", "#969696")
     .attr("stroke", "none");
 
@@ -179,9 +179,26 @@ Promise.all([
     movingAverage(aprueba, movingWindow, yDots, 'peso');
     movingAverage(desaprueba, movingWindow, yDots, 'peso');
 
-    lines = [aprueba, desaprueba]
+    lines = [aprueba, desaprueba];
+
+    yScale.domain([yMin, yMax]);
+    line.y(d => yScale(d[yLine]));
+
+    yAxis.call(
+      d3.axisLeft(yScale)
+        .tickFormat(d => d + '%')
+        .tickValues(tickValues)
+    );
   
-    svg.selectAll("circle .aprueba")
+    yAxis.selectAll(".domain").remove()
+    yAxis.selectAll(".tick line")
+      .attr('x2', width - margin.right - margin.left)
+      .attr("stroke", "#d9d9d9");
+    yAxis.selectAll(".tick text")
+      .attr("fill", "#969696")
+      .attr("stroke", "none");
+  
+    svg.selectAll(".aprueba")
         .data(aprueba)
         .join("circle")
           .attr("class", "aprueba")
@@ -191,7 +208,7 @@ Promise.all([
           .style("opacity", circleOpacity)
           .style('fill', colors[0]);
   
-    svg.selectAll("circle .desaprueba")
+    svg.selectAll(".desaprueba")
       .data(desaprueba)
       .join("circle")
         .attr("class", "desaprueba")
@@ -201,9 +218,8 @@ Promise.all([
         .style("opacity", circleOpacity)
         .style('fill', colors[1]);
 
-    console.log(lines)
   
-    const curves = svg.selectAll(".curve")
+    svg.selectAll(".curve")
         .data(lines)
         .join("path")
           .attr("class", "curve")
