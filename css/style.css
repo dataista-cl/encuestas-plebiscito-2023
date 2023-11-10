@@ -8,8 +8,8 @@ body {
 .title {
   font-family: 'David Libre', serif;
   text-align: center;
-  padding-top: 40px;
-  padding-bottom: 30px;
+  margin-top: 20px;
+  margin-bottom: 40px;
 }
 
 .viz-wrapper {
@@ -302,6 +302,10 @@ svg text {
 
   .viz-title {
     font-size: 16px;
+  }
+
+  .title {
+    padding: 10px 0 20px 0;
   }
 
   .title h2 {
