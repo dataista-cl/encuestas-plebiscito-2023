@@ -323,7 +323,7 @@ Promise.all([
         .style('paint-order', 'stroke fill')
         .text((d,i) => {
           if (windowWidth < threshold) {
-            return  i === 0 ? `${d[yLine].toFixed(1)}%` : `${d[yLine].toFixed(1)}%`
+            return  i === 0 ? `AF ${d[yLine].toFixed(1)}%` : `EC ${d[yLine].toFixed(1)}%`
           } else {
             return i === 0 ? `A favor ${d[yLine].toFixed(1)}%` : `En contra ${d[yLine].toFixed(1)}%`
           }
@@ -379,7 +379,7 @@ Promise.all([
                 .attr('stroke-width', 4)
                 .text((d,i) => {
                   if (windowWidth < threshold) {
-                    return i === 0 ? `${d[yLine].toFixed(1)}%` : `${d[yLine].toFixed(1)}%`;
+                    return i === 0 ? `AF ${d[yLine].toFixed(1)}%` : `EC ${d[yLine].toFixed(1)}%`;
                   } else {
                     return i === 0 ? `A favor ${d[yLine].toFixed(1)}%` : `En contra ${d[yLine].toFixed(1)}%`;
                   }
@@ -405,7 +405,13 @@ Promise.all([
             .attr("fill", (_, i) => colors[i])
             .attr("stroke", 'white')
             .attr('stroke-width', 4)
-            .text((d,i) => i === 0 ? `A favor ${d[yLine].toFixed(1)}%` : `En contra ${d[yLine].toFixed(1)}%`);
+            .text((d,i) => {
+              if (windowWidth < threshold) {
+                return i === 0 ? `AF ${d[yLine].toFixed(1)}%` : `EC ${d[yLine].toFixed(1)}%`;
+              } else {
+                return i === 0 ? `A favor ${d[yLine].toFixed(1)}%` : `En contra ${d[yLine].toFixed(1)}%`;
+              }
+            });
     };
   
     function click(event) {
