@@ -138,9 +138,9 @@ Promise.all([
         .on("click", (evt,d) => {
           porcentaje = d;
           yDots = d === 'absoluto' ? 'valor' : 'normalizado';
-          yMin = d === 'absoluto' ? 0 : 20;
-          yMax = d === 'absoluto' ? 70 : 80;
-          tickValues = d === 'absoluto' ? [0, 10, 20, 30, 40, 50, 60, 70] : [20, 30, 40, 50, 60, 70, 80];
+          yMin = d === 'absoluto' ? 0 : 10;
+          yMax = d === 'absoluto' ? 70 : 90;
+          tickValues = d === 'absoluto' ? [0, 10, 20, 30, 40, 50, 60, 70] : [10, 20, 30, 40, 50, 60, 70, 80, 90];
           updatePlot();
           updateButtons();
         });
@@ -190,7 +190,6 @@ Promise.all([
   encOpts.selectAll("a").on("click", function(event, d){
     if (d !== plotEncuestas) {
       plotEncuestas = d;
-      console.log(d)
       d3.select("#encuesta-dropdown").select(".dropbtn").html(plotEncuestas);
       updatePlot();
     }
