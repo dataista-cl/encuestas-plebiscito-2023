@@ -4,6 +4,7 @@ fecha,encuesta,a favor,en contra,nsnr,casos
 5–abr,Criteria,16 ,33 ,51 ,1000
 11–may,Cadem,40 ,36 ,24 ,707
 15–may,Data Influye, 14, 24, 62, 950
+22–may,Feedback, 26, 39, 35, 2254
 26–may,Cadem,34 ,46 ,20 ,703
 2–jun,Cadem,28 ,48 ,24 ,712
 5–jun,Criteria,19 ,27 ,54 ,1000
@@ -13,12 +14,14 @@ fecha,encuesta,a favor,en contra,nsnr,casos
 23–jun,Cadem,29 ,53 ,18 ,708
 30–jun,Cadem,30 ,54 ,16 ,708
 30–jun,Activa,17 ,24 ,37 ,1064
+3–jul,Feedback, 28.9, 44.2, 26.9, 2519
 4–jul,Criteria,17 ,31 ,52 ,1000
 7–jul,Cadem,25 ,55 ,20 ,708
 17–jul,Data Influye, 11, 31, 58, 1308
 21–jul,Cadem,26 ,57 ,17 ,705
 28–jul,Activa,12 ,26 ,46 ,1058
 8–ago,Criteria,15 ,41 ,44 ,1000
+10–ago,Feedback, 22.9, 59.9, 17.2, 2720
 21–ago,Data Influye, 11, 34, 55, 1157
 25–ago,Cadem,24 ,56 ,20 ,704
 31–ago,Activa,16 ,27 ,35 ,1076
